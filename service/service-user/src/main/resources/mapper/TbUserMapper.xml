@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.quan.mapper.TbUserMapper">
+    <select id="count" resultType="java.lang.Integer">
+        select count(*)
+        from tb_user
+        where username = #{username,jdbcType=VARCHAR}
+    </select>
+    <select id="findAll" resultType="com.quan.vo.UserAndDepartmentVO">
+        select u.id,
+               u.username,
+               u.sex,
+               d.name,
+               u.birth,
+               u.email,
+               u.phone_number,
+               u.status
+        from tb_user u
+                     inner join tb_department d
+                on u.department_id = d.id
+                ${ew.customSqlSegment}
+    </select>
+    <select id="findListExcel" resultType="com.quan.vo.UserExcelVO">
+        select u.id,
+               u.username,
+               u.nickname,
+               u.email,
+               u.avatar,
+               u.phone_number,
+               IF(u.status = 0, '锁定', '有效')    status,
+               CASE u.sex
+                       WHEN 0 THEN
+                               '男'
+                       WHEN 1 THEN
+                               '女'
+                       ELSE
+                               '保密'
+                       END                     sex,
+               d.name,
+               IF(u.type = 0, '超级管理员', '系统用户') type,
+               u.birth,
+               u.version,
+               IF(u.deleted = 0, '未删除', '已删除') deleted,
+               u.create_time,
+               u.modified_time
+        from tb_user u
+                     inner join tb_department d
+                on u.department_id = d.id
+                ${ew.customSqlSegment}
+    </select>
+</mapper>
