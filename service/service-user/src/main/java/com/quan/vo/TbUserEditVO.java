@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -18,7 +19,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @ApiModel(value = "com-quan-vo-TbUserEditVO")
-public class TbUserEditVO {
+public class TbUserEditVO implements Serializable {
     /**
      * 用户ID
      */
@@ -81,4 +82,6 @@ public class TbUserEditVO {
     @TableField(value = "status")
     @ApiModelProperty(value = "状态 0锁定 1有效")
     private Integer status;
+
+    private static final long serialVersionUID = 1L;
 }

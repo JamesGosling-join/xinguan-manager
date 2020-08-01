@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.quan.mapper.TbLogMapper">
+  <resultMap id="BaseResultMap" type="com.quan.pojo.TbLog">
+    <!--@mbg.generated-->
+    <!--@Table tb_log-->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="operation" jdbcType="LONGVARCHAR" property="operation" />
+    <result column="time" jdbcType="DECIMAL" property="time" />
+    <result column="method" jdbcType="LONGVARCHAR" property="method" />
+    <result column="params" jdbcType="LONGVARCHAR" property="params" />
+    <result column="ip" jdbcType="VARCHAR" property="ip" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="location" jdbcType="VARCHAR" property="location" />
+    <result column="version" jdbcType="BIGINT" property="version" />
+    <result column="deleted" jdbcType="BOOLEAN" property="deleted" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, username, `operation`, `time`, `method`, params, ip, create_time, `location`, 
+    version, deleted
+  </sql>
+</mapper>

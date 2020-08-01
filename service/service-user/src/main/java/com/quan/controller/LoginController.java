@@ -20,7 +20,7 @@ import javax.annotation.Resource;
 @Api("登录接口")
 @RestController
 @CrossOrigin
-@RequestMapping("/login")
+@RequestMapping("/userservice/login")
 public class LoginController {
     @Resource
     private TbUserService tbUserService;

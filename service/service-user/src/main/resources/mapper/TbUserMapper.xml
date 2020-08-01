@@ -50,4 +50,10 @@
                 on u.department_id = d.id
                 ${ew.customSqlSegment}
     </select>
+    <select id="findMgrUser" resultType="com.quan.vo.MgrUser">
+        select u.id, u.username
+        from tb_user u
+                     inner join tb_user_role ur on u.id = ur.user_id
+        where ur.role_id = (select id from tb_role where role_name = '部门主任')
+    </select>
 </mapper>

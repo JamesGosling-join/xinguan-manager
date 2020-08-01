@@ -17,25 +17,21 @@ import java.io.Serializable;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel(value = "com-quan-vo-TbDepartmentShowView")
-public class TbDepartmentShowView implements Serializable {
+@ApiModel(value = "com-quan-vo-MgrUser")
+public class MgrUser implements Serializable {
+    /**
+     * 用户ID
+     */
     @TableId(value = "id", type = IdType.AUTO)
-    @ApiModelProperty(value = "主键id")
+    @ApiModelProperty(value = "用户ID")
     private Long id;
 
     /**
-     * 系名
+     * 用户名
      */
-    @TableField(value = "name")
-    @ApiModelProperty(value = "系名")
-    private String name;
-
-    /**
-     * 当前系人数
-     */
-    @TableField(value = "count")
-    @ApiModelProperty(value = "当前系人数")
-    private Integer count;
+    @TableField(value = "username")
+    @ApiModelProperty(value = "用户名")
+    private String username;
 
     private static final long serialVersionUID = 1L;
 }

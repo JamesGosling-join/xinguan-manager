@@ -6,10 +6,7 @@ import com.quan.md5.MD5Utils;
 import com.quan.pojo.TbUser;
 import com.quan.response.Result;
 import com.quan.service.TbUserService;
-import com.quan.vo.TbUserEditVO;
-import com.quan.vo.TbUserVO;
-import com.quan.vo.UserAndDepartmentVO;
-import com.quan.vo.UserExcelVO;
+import com.quan.vo.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.BeanUtils;
@@ -27,18 +24,22 @@ import java.util.UUID;
 @CrossOrigin
 @Api("用户管理")
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/userservice/user")
 public class TbUserController {
     @Resource
     private TbUserService tbUserService;
 
     @ApiOperation(value = "查询用户", notes = "跟据查询页数与个数分页查询所有用户信息，按照条件查询")
     @PostMapping({"users/{current}/{size}", "users", "users/{current}"})
-    public Result userPageCondition(@PathVariable(value = "current", required = false) Long current, @PathVariable(value = "size", required = false) Long size, @RequestBody(required = false) TbUserVO tbUserVO) {
+    public Result userPageCondition(@PathVariable(value = "current", required = false) Long current,
+                                    @PathVariable(value = "size", required = false) Long size,
+                                    @RequestBody(required = false) TbUserVO tbUserVO) {
         QueryWrapper<UserAndDepartmentVO> qw = new QueryWrapper<>();
-        getQueryWrapper(qw,tbUserVO);
+        getQueryWrapper(qw, tbUserVO);
         qw.eq("u.deleted", 0);
-        return Result.success().data(tbUserService.findAll(new Page<>(current == null ? 1L : current, size == null ? 5L : size), qw));
+        qw.eq("d.deleted", 0);
+        return Result.success()
+                .data(tbUserService.findAll(new Page<>(current == null ? 1L : current, size == null ? 5L : size), qw));
     }
 
     @ApiOperation(value = "删除用户", notes = "跟据用户id逻辑删除用户信息")
@@ -64,12 +65,12 @@ public class TbUserController {
 
     @ApiOperation(value = "新增用户信息", notes = "新增用户信息")
     @PostMapping("add")
-    public Result add(@RequestBody(required = false) TbUserVO tbUserVO) {
-        if (tbUserService.selectCount(tbUserVO.getUsername()) > 0) {
+    public Result add(@RequestBody(required = false) TbUserAddVO tbUserAddVO) {
+        if (tbUserService.selectCount(tbUserAddVO.getUsername()) > 0) {
             throw new RuntimeException("该用户名已被占用");
         }
         TbUser tbUser = new TbUser();
-        BeanUtils.copyProperties(tbUserVO, tbUser);
+        BeanUtils.copyProperties(tbUserAddVO, tbUser);
         tbUser.setSalt(UUID.randomUUID().toString().substring(0, 32));
         tbUser.setPassword(MD5Utils.md5Encryption(tbUser.getPassword(), tbUser.getSalt()));
         tbUser.setAvatar("https://avatars.dicebear.com/v2/male/" + tbUser.getUsername() + ".svg");
@@ -93,14 +94,20 @@ public class TbUserController {
     }
 
     @ApiOperation("导出excel")
-    @PostMapping(value = "export",produces = {"application/json;charset=UTF-8"})
+    @PostMapping(value = "export")
     public void exportExcel(HttpServletResponse response, @RequestBody(required = false) TbUserVO tbUserVO) throws IOException {
-        QueryWrapper<UserExcelVO> qw=new QueryWrapper<>();
-        getQueryWrapper(qw,tbUserVO);
-        tbUserService.findListExcel(response,qw);
+        QueryWrapper<UserExcelVO> qw = new QueryWrapper<>();
+        getQueryWrapper(qw, tbUserVO);
+        tbUserService.findListExcel(response, qw);
     }
 
-    private void getQueryWrapper(QueryWrapper<?> qw,TbUserVO tbUserVO){
+    @ApiOperation(value = "查找部门主任", notes = "返回用户id和用户名")
+    @GetMapping(value = "getMgrUser")
+    public Result getMgrUser() {
+        return Result.success().data(tbUserService.findMgrUser());
+    }
+
+    private void getQueryWrapper(QueryWrapper<?> qw, TbUserVO tbUserVO) {
         if (!StringUtils.isEmpty(tbUserVO)) {
             if (!StringUtils.isEmpty(tbUserVO.getUsername())) {
                 qw.like("username", tbUserVO.getUsername().trim());

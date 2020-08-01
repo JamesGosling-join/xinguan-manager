@@ -15,21 +15,28 @@ import java.io.Serializable;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel(value = "com-quan-vo-ReturnTbUserVO")
-public class ReturnTbUserVO implements Serializable {
+@ApiModel(value = "com-quan-vo-LogVO")
+public class LogVO implements Serializable {
     /**
-     * 用户名
+     * 操作用户
      */
     @TableField(value = "username")
-    @ApiModelProperty(value = "用户名")
+    @ApiModelProperty(value = "操作用户")
     private String username;
 
     /**
-     * 头像
+     * 操作者IP
      */
-    @TableField(value = "avatar")
-    @ApiModelProperty(value = "头像")
-    private String avatar;
+    @TableField(value = "ip")
+    @ApiModelProperty(value = "操作者IP")
+    private String ip;
+
+    /**
+     * 操作地点
+     */
+    @TableField(value = "location")
+    @ApiModelProperty(value = "操作地点")
+    private String location;
 
     private static final long serialVersionUID = 1L;
 }

@@ -35,7 +35,7 @@ public class SwaggerConfig {
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 //页面标题
-                .title("用户信息管理")
+                .title("新冠物资管理系统")
                 //创建人
                 .contact(new Contact("QuanJun", "http://all_jun.gitee.io/blog/", "2748905013@qq.com"))
                 //版本号

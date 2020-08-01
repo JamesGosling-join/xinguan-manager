@@ -18,8 +18,8 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel(value = "com-quan-vo-UserAndDepartmentVO")
-public class UserAndDepartmentVO implements Serializable {
+@ApiModel(value = "com-quan-vo-TbUserEditVO")
+public class TbUserAddVO implements Serializable {
     /**
      * 用户ID
      */
@@ -35,25 +35,11 @@ public class UserAndDepartmentVO implements Serializable {
     private String username;
 
     /**
-     * 性别 0男 1女 2保密
+     * 昵称
      */
-    @TableField(value = "sex")
-    @ApiModelProperty(value = "性别 0男 1女 2保密")
-    private Integer sex;
-
-    /**
-     * 系名
-     */
-    @TableField(value = "name")
-    @ApiModelProperty(value = "系名")
-    private String name;
-
-    /**
-     * 生日
-     */
-    @TableField(value = "birth")
-    @ApiModelProperty(value = "生日")
-    private Date birth;
+    @TableField(value = "nickname")
+    @ApiModelProperty(value = "昵称")
+    private String nickname;
 
     /**
      * 邮箱
@@ -63,6 +49,20 @@ public class UserAndDepartmentVO implements Serializable {
     private String email;
 
     /**
+     * 性别 0男 1女 2保密
+     */
+    @TableField(value = "sex")
+    @ApiModelProperty(value = "性别 0男 1女 2保密")
+    private Integer sex;
+
+    /**
+     * 部门id
+     */
+    @TableField(value = "department_id")
+    @ApiModelProperty(value = "部门id")
+    private Long departmentId;
+
+    /**
      * 联系电话
      */
     @TableField(value = "phone_number")
@@ -70,11 +70,18 @@ public class UserAndDepartmentVO implements Serializable {
     private String phoneNumber;
 
     /**
-     * 状态 0锁定 1有效
+     * 生日
      */
-    @TableField(value = "status")
-    @ApiModelProperty(value = "状态 0锁定 1有效")
-    private Integer status;
+    @TableField(value = "birth")
+    @ApiModelProperty(value = "生日")
+    private Date birth;
+
+    /**
+     * 密码
+     */
+    @TableField(value = "password")
+    @ApiModelProperty(value = "密码")
+    private String password;
 
     private static final long serialVersionUID = 1L;
 }

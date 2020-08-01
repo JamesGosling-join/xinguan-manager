@@ -4,6 +4,7 @@ import com.alibaba.excel.EasyExcel;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.quan.service.TbUserService;
+import com.quan.vo.MgrUser;
 import com.quan.vo.UserAndDepartmentVO;
 import com.quan.vo.UserExcelVO;
 import org.springframework.stereotype.Service;
@@ -53,14 +54,24 @@ public class TbUserServiceImpl extends ServiceImpl<TbUserMapper, TbUser> impleme
     }
 
     /**
+     * 查询部门主任信息
+     *
+     * @return 部门主任信息
+     */
+    @Override
+    public List<MgrUser> findMgrUser() {
+        return this.baseMapper.findMgrUser();
+    }
+
+    /**
      * 导出查询到的用户信息为excel
      *
      * @param response 用于导出excel
-     * @param qw       导出条件
+     * @param wrapper       导出条件
      */
     @Override
-    public void findListExcel(HttpServletResponse response, Wrapper<UserExcelVO> qw) {
-        List<UserExcelVO> list = this.baseMapper.findListExcel(qw);
+    public void findListExcel(HttpServletResponse response, Wrapper<UserExcelVO> wrapper) {
+        List<UserExcelVO> list = this.baseMapper.findListExcel(wrapper);
         response.setContentType("application/vnd.ms-excel");
         response.setCharacterEncoding("utf-8");
         String fileName = null;

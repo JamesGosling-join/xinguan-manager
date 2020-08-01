@@ -1,15 +1,13 @@
 package com.quan.vo;
 
-import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import java.io.Serializable;
 
 /**
  * @author 全俊
@@ -18,14 +16,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @ApiModel(value = "com-quan-vo-TbUserVO")
-public class TbUserVO {
-    /**
-     * 用户ID
-     */
-    @TableId(value = "id", type = IdType.AUTO)
-    @ApiModelProperty(value = "用户ID")
-    private Long id;
-
+public class TbUserVO implements Serializable {
     /**
      * 用户名
      */
@@ -61,24 +52,5 @@ public class TbUserVO {
     @ApiModelProperty(value = "部门id")
     private Long departmentId;
 
-    /**
-     * 密码
-     */
-    @TableField(value = "password")
-    @ApiModelProperty(value = "密码")
-    private String password;
-
-    /**
-     * 联系电话
-     */
-    @TableField(value = "phone_number")
-    @ApiModelProperty(value = "联系电话")
-    private String phoneNumber;
-
-    /**
-     * 生日
-     */
-    @TableField(value = "birth")
-    @ApiModelProperty(value = "生日")
-    private Date birth;
+    private static final long serialVersionUID = 1L;
 }

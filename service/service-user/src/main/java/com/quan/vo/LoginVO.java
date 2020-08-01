@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 /**
  * @author 全俊
  */
@@ -14,7 +16,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @ApiModel(value = "com-quan-vo-LoginVO")
-public class LoginVO {
+public class LoginVO implements Serializable {
     /**
      * 用户名
      */
@@ -28,4 +30,6 @@ public class LoginVO {
     @TableField(value = "password")
     @ApiModelProperty(value = "密码")
     private String password;
+
+    private static final long serialVersionUID = 1L;
 }

@@ -14,27 +14,68 @@
         <result column="version" jdbcType="BIGINT" property="version"/>
         <result column="deleted" jdbcType="BOOLEAN" property="deleted"/>
     </resultMap>
-    <resultMap id="Count" type="com.quan.vo.TbDepartmentShowView">
-        <!--@mbg.generated-->
-        <!--@Table tb_department-->
-        <id column="id" jdbcType="BIGINT" property="id"/>
-        <result column="name" jdbcType="VARCHAR" property="name"/>
-        <association property="count" select="com.quan.mapper.TbDepartmentMapper.countByNoDel" column="department_id=id"
-                     javaType="java.lang.Integer"/>
-    </resultMap>
     <sql id="Base_Column_List">
         <!--@mbg.generated-->
         id, `name`, phone, address, create_time, modified_time, mgr_id, version, deleted
     </sql>
-    <select id="getDepartment" resultMap="Count">
-        select id, name
-        from tb_department
+    <select id="getDepartment" resultType="com.quan.vo.TbDepartmentShowView">
+        select d.id,
+               d.name,
+               IFNULL((select count(*)
+                       from tb_user u
+                       where u.department_id = d.id
+                         and u.deleted = 0
+                       group by department_id), 0) count
+        from tb_department d
+        where d.deleted = 0
     </select>
-    <select id="countByNoDel" resultType="java.lang.Integer">
-        select count(*) count
-        from tb_user
-        where department_id = #{department_id}
-          and deleted = 0
-        group by department_id
+    <select id="findAll" resultType="com.quan.vo.TbDepartmentAndUser">
+        select d.id,
+               d.phone,
+               d.name,
+               IFNULL((select count(*)
+                       from tb_user u
+                       where u.department_id = d.id
+                         and u.deleted = 0
+                       group by department_id), 0)        count,
+               d.create_time,
+               d.modified_time,
+               IFNULL((select username
+                       FROM tb_user u
+                                    inner join tb_user_role ur on u.id = ur.user_id
+                       WHERE ur.role_id = (select id from tb_role where role_name = '部门主任')
+                         and u.deleted = 0
+                         and u.id = d.mgr_id), '该部门没有主任') username,
+               d.address
+        from tb_department d
+                     inner join tb_user u on d.mgr_id = u.id ${ew.customSqlSegment}
+    </select>
+    <select id="count" resultType="java.lang.Integer">
+        select count(*)
+        from tb_department
+        where name = #{name,jdbcType=VARCHAR}
+    </select>
+    <select id="findListExcel" resultType="com.quan.vo.TbDepartmentExcel">
+        select d.id,
+               d.phone,
+               d.name,
+               IFNULL((select count(*)
+                       from tb_user u
+                       where u.department_id = d.id
+                         and u.deleted = 0
+                       group by department_id), 0)        count,
+               d.create_time,
+               d.modified_time,
+               IFNULL((select username
+                       FROM tb_user u
+                                    inner join tb_user_role ur on u.id = ur.user_id
+                       WHERE ur.role_id = (select id from tb_role where role_name = '部门主任')
+                         and u.deleted = 0
+                         and u.id = d.mgr_id), '该部门没有主任') username,
+               d.address,
+               IF(d.deleted = 0, '未删除', '已删除')            deleted,
+               d.version
+        from tb_department d
+                     inner join tb_user u on d.mgr_id = u.id ${ew.customSqlSegment}
     </select>
 </mapper>

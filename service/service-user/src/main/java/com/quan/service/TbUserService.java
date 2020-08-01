@@ -5,11 +5,13 @@ import com.baomidou.mybatisplus.core.toolkit.Constants;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.quan.pojo.TbUser;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.quan.vo.MgrUser;
 import com.quan.vo.UserAndDepartmentVO;
 import com.quan.vo.UserExcelVO;
 import org.apache.ibatis.annotations.Param;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  * @author 全俊
@@ -36,7 +38,14 @@ public interface TbUserService extends IService<TbUser> {
      * 导出查询到的用户信息为excel
      *
      * @param response 用于导出excel
-     * @param qw 导出条件
+     * @param wrapper  导出条件
      */
-    void findListExcel(HttpServletResponse response, Wrapper<UserExcelVO> qw);
+    void findListExcel(HttpServletResponse response, Wrapper<UserExcelVO> wrapper);
+
+    /**
+     * 查询部门主任信息
+     *
+     * @return 部门主任信息
+     */
+    List<MgrUser> findMgrUser();
 }

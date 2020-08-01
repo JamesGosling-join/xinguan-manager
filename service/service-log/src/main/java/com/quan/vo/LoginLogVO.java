@@ -15,8 +15,8 @@ import java.io.Serializable;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel(value = "com-quan-vo-ReturnTbUserVO")
-public class ReturnTbUserVO implements Serializable {
+@ApiModel(value = "com-quan-vo-LoginLogVO")
+public class LoginLogVO implements Serializable {
     /**
      * 用户名
      */
@@ -25,11 +25,18 @@ public class ReturnTbUserVO implements Serializable {
     private String username;
 
     /**
-     * 头像
+     * IP地址
      */
-    @TableField(value = "avatar")
-    @ApiModelProperty(value = "头像")
-    private String avatar;
+    @TableField(value = "ip")
+    @ApiModelProperty(value = "IP地址")
+    private String ip;
+
+    /**
+     * 登录地点
+     */
+    @TableField(value = "location")
+    @ApiModelProperty(value = "登录地点")
+    private String location;
 
     private static final long serialVersionUID = 1L;
 }
