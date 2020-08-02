@@ -96,7 +96,7 @@ public class TbDepartmentExcel implements Serializable {
     @TableField(value = "deleted")
     @ApiModelProperty(value = "逻辑删除")
     @ExcelProperty(value = "逻辑删除",index = 9)
-    private Boolean deleted;
+    private String deleted;
 
     private static final long serialVersionUID = 1L;
 }

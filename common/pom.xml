@@ -14,6 +14,7 @@
     <modules>
         <module>common-base</module>
         <module>common-util</module>
+        <module>common-oss</module>
     </modules>
     <dependencies>
         <dependency>
@@ -52,6 +53,16 @@
         <dependency>
             <groupId>org.apache.shiro</groupId>
             <artifactId>shiro-spring</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.aliyun.oss</groupId>
+            <artifactId>aliyun-sdk-oss</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
         </dependency>
     </dependencies>
 

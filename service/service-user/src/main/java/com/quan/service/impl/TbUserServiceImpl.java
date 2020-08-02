@@ -47,7 +47,7 @@ public class TbUserServiceImpl extends ServiceImpl<TbUserMapper, TbUser> impleme
         if (voPage.getRecords().size() == 0) {
             Long total = page.getTotal();
             Long size = page.getSize();
-            page.setCurrent(total%size==0?total/size:total/size+1);
+            page.setCurrent(total % size == 0 ? total / size : total / size + 1);
             voPage = this.baseMapper.findAll(page, wrapper);
         }
         return voPage;
@@ -67,7 +67,7 @@ public class TbUserServiceImpl extends ServiceImpl<TbUserMapper, TbUser> impleme
      * 导出查询到的用户信息为excel
      *
      * @param response 用于导出excel
-     * @param wrapper       导出条件
+     * @param wrapper  导出条件
      */
     @Override
     public void findListExcel(HttpServletResponse response, Wrapper<UserExcelVO> wrapper) {
@@ -88,4 +88,17 @@ public class TbUserServiceImpl extends ServiceImpl<TbUserMapper, TbUser> impleme
         }
     }
 
+    /**
+     * @param avatar   头像地址
+     * @param username 用户名
+     * @return java.lang.Boolean
+     * @description TODO
+     * @methodName updateByName
+     * @author 全俊
+     * @date 2020/8/2 23:02
+     */
+    @Override
+    public Boolean updateByName(String avatar, String username) {
+        return this.baseMapper.updateByName(avatar, username);
+    }
 }

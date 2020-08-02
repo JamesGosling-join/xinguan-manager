@@ -6,12 +6,14 @@ import com.quan.md5.MD5Utils;
 import com.quan.pojo.TbUser;
 import com.quan.response.Result;
 import com.quan.service.TbUserService;
+import com.quan.util.OSSClientUtils;
 import com.quan.vo.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.BeanUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
@@ -125,5 +127,14 @@ public class TbUserController {
                 qw.eq("department_id", tbUserVO.getDepartmentId());
             }
         }
+    }
+
+    @ApiOperation("上传头像")
+    @PostMapping("uploadImg/{username}")
+    public Result uploadImg(MultipartFile file,@PathVariable String username) {
+        OSSClientUtils ossClientUtils=new OSSClientUtils();
+        String avatar=ossClientUtils.upload(file);
+        tbUserService.updateByName(avatar,username);
+        return Result.success().data(avatar);
     }
 }

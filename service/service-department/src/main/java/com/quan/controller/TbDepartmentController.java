@@ -96,7 +96,7 @@ public class TbDepartmentController {
     }
 
     @ApiOperation("导出excel")
-    @PostMapping(value = "export")
+    @GetMapping(value = "export")
     public void exportExcel(HttpServletResponse response, @RequestParam(required = false) String name) throws IOException {
         QueryWrapper<TbDepartmentExcel> qw = new QueryWrapper<>();
         getQueryWrapper(qw, name);

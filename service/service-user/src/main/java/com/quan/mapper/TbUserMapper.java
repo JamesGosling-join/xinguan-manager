@@ -49,4 +49,15 @@ public interface TbUserMapper extends BaseMapper<TbUser> {
      * @return 部门主任信息
      */
     List<MgrUser> findMgrUser();
+
+    /**
+     * @param avatar 图片地址
+     * @param username 用户名
+     * @return java.lang.Boolean
+     * @description TODO
+     * @methodName updateByName
+     * @author 全俊
+     * @date 2020/8/2 23:04
+     */
+    Boolean updateByName(@Param("avatar") String avatar,@Param("username") String username);
 }

@@ -34,6 +34,7 @@ public interface TbUserService extends IService<TbUser> {
      */
     Page<UserAndDepartmentVO> findAll(Page<UserAndDepartmentVO> page, @Param(Constants.WRAPPER) Wrapper<UserAndDepartmentVO> wrapper);
 
+
     /**
      * 导出查询到的用户信息为excel
      *
@@ -48,4 +49,15 @@ public interface TbUserService extends IService<TbUser> {
      * @return 部门主任信息
      */
     List<MgrUser> findMgrUser();
+
+    /**
+     * @param avatar   头像地址
+     * @param username 用户名
+     * @return java.lang.Boolean
+     * @description TODO
+     * @methodName updateByName
+     * @author 全俊
+     * @date 2020/8/2 23:02
+     */
+    Boolean updateByName(String avatar, String username);
 }
