@@ -21,9 +21,9 @@ import java.util.UUID;
 public class OSSClientUtils {
     private String endPoint = "oss-cn-shanghai.aliyuncs.com";
 
-    private String accessKeyId = "LTAI4GDKeumwn1WsNt7BYq97";
+    private String accessKeyId = "LTAI4GAYp3cbvVvCuPhH6GLn";
 
-    private String accessKeySecret = "db2EMAF748A1cAsaJdAzGzo4ckrUQ5";
+    private String accessKeySecret = "5zwmP0RHZQcshD2DbKODEKZCud5LgJ";
 
     private String bucketName = "quan-image";
 
