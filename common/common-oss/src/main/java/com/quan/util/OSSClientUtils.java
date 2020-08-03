@@ -15,7 +15,7 @@ import java.util.UUID;
  * @author 全俊
  * @version 1.0
  * @className OSSClientUtils
- * @description TODO
+ * @description OSS对象存储工具类
  * @date 2020/8/2 20:28
  */
 public class OSSClientUtils {
