@@ -5,6 +5,7 @@ import com.aliyun.oss.OSSClientBuilder;
 import com.aliyun.oss.model.CannedAccessControlList;
 import com.aliyun.oss.model.ObjectMetadata;
 import org.joda.time.DateTime;
+import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
@@ -18,6 +19,7 @@ import java.util.UUID;
  * @description OSS对象存储工具类
  * @date 2020/8/2 20:28
  */
+@Component
 public class OSSClientUtils {
     private String endPoint = "oss-cn-shanghai.aliyuncs.com";
 

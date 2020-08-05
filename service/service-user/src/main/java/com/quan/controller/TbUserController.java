@@ -35,6 +35,9 @@ public class TbUserController {
     @Resource
     private StringRedisTemplate stringRedisTemplate;
 
+    @Resource
+    private OSSClientUtils ossClientUtils;
+
     @ApiOperation(value = "查询用户", notes = "跟据查询页数与个数分页查询所有用户信息，按照条件查询")
     @PostMapping({"users/{current}/{size}", "users", "users/{current}"})
     public Result userPageCondition(@PathVariable(value = "current", required = false) Long current,
@@ -100,7 +103,7 @@ public class TbUserController {
         }
     }
 
-    @ApiOperation("导出excel")
+    @ApiOperation(value = "导出excel",notes = "根据查询条件将查询结果导出为excel")
     @PostMapping(value = "export")
     public void exportExcel(HttpServletResponse response,
                             @RequestBody(required = false) TbUserVO tbUserVO) throws IOException {
@@ -135,10 +138,9 @@ public class TbUserController {
         }
     }
 
-    @ApiOperation("上传头像")
+    @ApiOperation(value = "上传头像",notes = "将图片上传到OSS")
     @PostMapping("uploadImg/{username}")
     public Result uploadImg(MultipartFile file, @PathVariable String username) {
-        OSSClientUtils ossClientUtils = new OSSClientUtils();
         String avatar = ossClientUtils.upload(file);
         UpdateWrapper<TbUser> uw=new UpdateWrapper<>();
         uw.set("avatar",avatar);

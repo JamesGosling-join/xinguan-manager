@@ -18,6 +18,18 @@ import java.io.Serializable;
 @ApiModel(value = "com-quan-vo-LoginVO")
 public class LoginVO implements Serializable {
     /**
+     * 验证码
+     */
+    @ApiModelProperty(value = "验证码")
+    private String code;
+
+    /**
+     * 验证码的键
+     */
+    @ApiModelProperty(value = "验证码的键")
+    private String key;
+
+    /**
      * 用户名
      */
     @TableField(value = "username")

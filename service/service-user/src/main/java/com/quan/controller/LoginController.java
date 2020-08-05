@@ -1,6 +1,8 @@
 package com.quan.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.quan.captcha.CaptchaUtils;
+import com.quan.jwt.JwtUtils;
 import com.quan.md5.MD5Utils;
 import com.quan.pojo.TbUser;
 import com.quan.random.RandomUtil;
@@ -19,6 +21,10 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -31,12 +37,27 @@ import java.util.concurrent.TimeUnit;
 public class LoginController {
     @Resource
     private TbUserService tbUserService;
+
     @Resource
     private StringRedisTemplate stringRedisTemplate;
+
+    @Resource
+    private SMSClientUtils smsClientUtils;
+
+    @Resource
+    private JwtUtils jwtUtils;
+
+    @Resource
+    private CaptchaUtils captchaUtils;
 
     @ApiOperation(value = "登录", notes = "验证登录")
     @PostMapping("/")
     public Result login(@RequestBody LoginVO loginVO) {
+        String redisCode = stringRedisTemplate.opsForValue().get(loginVO.getKey());
+        // 判断验证码
+        if (loginVO.getCode() == null || !redisCode.equals(loginVO.getCode().trim().toLowerCase())) {
+            throw new RuntimeException("验证码错误");
+        }
         QueryWrapper<TbUser> qw = new QueryWrapper<>();
         qw.eq("username", loginVO.getUsername());
         TbUser user = tbUserService.getOne(qw);
@@ -52,13 +73,17 @@ public class LoginController {
         if (tbUser.getStatus() == 0) {
             throw new RuntimeException("该账户已被禁用");
         }
-        return Result.success().data(tbUser.getId());
+        String token = jwtUtils.createJwt(tbUser.getUsername());
+        return Result.success().data(token);
     }
 
     @ApiOperation(value = "获得用户信息", notes = "获取当前登录用户信息")
     @GetMapping("user")
-    public Result getUser(@RequestParam Long token) {
-        TbUser tbUser = tbUserService.getById(token);
+    public Result getUser(@RequestParam String token) {
+        String username = jwtUtils.parseJwtTest(token);
+        QueryWrapper<TbUser> qw = new QueryWrapper<>();
+        qw.eq("username", username);
+        TbUser tbUser = tbUserService.getOne(qw);
         if (StringUtils.isEmpty(tbUser)) {
             throw new RuntimeException("当前用户不存在");
         } else {
@@ -73,12 +98,12 @@ public class LoginController {
         return Result.success();
     }
 
-    @ApiOperation("短信验证")
+    @ApiOperation(value = "短信验证", notes = "通过短信验证用户信息")
     @PostMapping("sendSMS")
     public Result sendSMS(@RequestParam String phoneNumber) {
-        QueryWrapper<TbUser> qw=new QueryWrapper<>();
-        qw.eq("phone_number",phoneNumber);
-        if(tbUserService.selectCount(qw)>0){
+        QueryWrapper<TbUser> qw = new QueryWrapper<>();
+        qw.eq("phone_number", phoneNumber);
+        if (tbUserService.selectCount(qw) > 0) {
             throw new RuntimeException("该手机号已被注册");
         }
         String code = stringRedisTemplate.opsForValue().get(phoneNumber);
@@ -87,7 +112,7 @@ public class LoginController {
         } else {
             String sixBitRandom = RandomUtil.getSixBitRandom();
             String templateParam = "{code:" + sixBitRandom + "}";
-            if (new SMSClientUtils().send(phoneNumber, templateParam)) {
+            if (smsClientUtils.send(phoneNumber, templateParam)) {
                 stringRedisTemplate.opsForValue().set(phoneNumber, sixBitRandom, 5, TimeUnit.MINUTES);
                 return Result.success();
             } else {
@@ -106,8 +131,8 @@ public class LoginController {
         if (!code.equalsIgnoreCase(userRegister.getCode())) {
             throw new RuntimeException("验证码错误");
         }
-        QueryWrapper<TbUser> qw=new QueryWrapper<>();
-        qw.eq("username",userRegister.getUsername());
+        QueryWrapper<TbUser> qw = new QueryWrapper<>();
+        qw.eq("username", userRegister.getUsername());
         if (tbUserService.selectCount(qw) > 0) {
             throw new RuntimeException("该用户名已被占用");
         }
@@ -119,5 +144,17 @@ public class LoginController {
         } else {
             return Result.fail();
         }
+    }
+
+    @ApiOperation(value = "生成图片验证码", notes = "将生成的验证码返回到前端")
+    @GetMapping("captcha")
+    public Result captcha(HttpServletRequest request, HttpServletResponse response, String key) throws Exception {
+        if(!StringUtils.isEmpty(key)) {
+            stringRedisTemplate.delete(key);
+        }
+        Map<String, String> map = captchaUtils.captcha(request, response, key);
+        stringRedisTemplate.opsForValue().set(map.get("key"), map.get("code"), 5, TimeUnit.MINUTES);
+        map.remove("code");
+        return Result.success().data(map);
     }
 }

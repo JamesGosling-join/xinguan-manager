@@ -22,6 +22,7 @@ public class UserRegister {
     /**
      * 验证码
      */
+    @ApiModelProperty(value = "验证码")
     private String code;
 
     /**

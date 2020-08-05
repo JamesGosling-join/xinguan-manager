@@ -10,6 +10,7 @@ import com.aliyuncs.profile.DefaultProfile;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.stereotype.Component;
 
 /**
  * @author 全俊
@@ -18,6 +19,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * @description TODO
  * @date 2020/8/3 23:05
  */
+@Component
 public class SMSClientUtils {
     /**
      * @param phoneNumber
