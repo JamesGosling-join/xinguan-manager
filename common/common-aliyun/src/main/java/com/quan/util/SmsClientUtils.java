@@ -20,7 +20,7 @@ import org.springframework.stereotype.Component;
  * @date 2020/8/3 23:05
  */
 @Component
-public class SMSClientUtils {
+public class SmsClientUtils {
     /**
      * @param phoneNumber
      * @param templateParam

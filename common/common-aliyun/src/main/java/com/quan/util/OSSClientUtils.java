@@ -4,6 +4,7 @@ import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClientBuilder;
 import com.aliyun.oss.model.CannedAccessControlList;
 import com.aliyun.oss.model.ObjectMetadata;
+import com.quan.constant.ConfigConsts;
 import org.joda.time.DateTime;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -89,34 +90,34 @@ public class OSSClientUtils {
     /**
      * Description: 判断OSS服务文件上传时文件的contentType
      *
-     * @param FileNameExtension 文件后缀
+     * @param filenameExtension 文件后缀
      * @return String
      */
-    public static String getContentType(String FileNameExtension) {
-        if (FileNameExtension.equalsIgnoreCase(".bmp")) {
+    public static String getContentType(String filenameExtension) {
+        if (ConfigConsts.BMP.equalsIgnoreCase(filenameExtension)) {
             return "image/bmp";
         }
-        if (FileNameExtension.equalsIgnoreCase(".gif")) {
+        if (ConfigConsts.GIF.equalsIgnoreCase(filenameExtension)) {
             return "image/gif";
         }
-        if (FileNameExtension.equalsIgnoreCase(".html")) {
+        if (ConfigConsts.HTML.equalsIgnoreCase(filenameExtension)) {
             return "text/html";
         }
-        if (FileNameExtension.equalsIgnoreCase(".txt")) {
+        if (ConfigConsts.TXT.equalsIgnoreCase(filenameExtension)) {
             return "text/plain";
         }
-        if (FileNameExtension.equalsIgnoreCase(".vsd")) {
+        if (ConfigConsts.VSD.equalsIgnoreCase(filenameExtension)) {
             return "application/vnd.visio";
         }
-        if (FileNameExtension.equalsIgnoreCase(".pptx") ||
-                FileNameExtension.equalsIgnoreCase(".ppt")) {
+        if (ConfigConsts.PPTX.equalsIgnoreCase(filenameExtension) ||
+                ConfigConsts.PPT.equalsIgnoreCase(filenameExtension)) {
             return "application/vnd.ms-powerpoint";
         }
-        if (FileNameExtension.equalsIgnoreCase(".docx") ||
-                FileNameExtension.equalsIgnoreCase(".doc")) {
+        if (ConfigConsts.DOCX.equalsIgnoreCase(filenameExtension) ||
+                ConfigConsts.DOC.equalsIgnoreCase(filenameExtension)) {
             return "application/msword";
         }
-        if (FileNameExtension.equalsIgnoreCase(".xml")) {
+        if (ConfigConsts.XML.equalsIgnoreCase(filenameExtension)) {
             return "text/xml";
         }
         return "image/jpg";

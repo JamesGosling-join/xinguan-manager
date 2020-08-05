@@ -6,7 +6,7 @@ import org.apache.shiro.crypto.hash.SimpleHash;
 /**
  * @author 全俊
  */
-public class MD5Utils {
+public class Md5Utils {
 
     /**
      * 密码加密

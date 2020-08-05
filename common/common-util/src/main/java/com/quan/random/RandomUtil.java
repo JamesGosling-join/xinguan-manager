@@ -11,20 +11,24 @@ import java.util.Random;
  *
  * @author 全俊
  */
+@SuppressWarnings({"ALL", "AlibabaConstantFieldShouldBeUpperCase"})
 public class RandomUtil {
 
-	private static final Random random = new Random();
+	@SuppressWarnings("AlibabaConstantFieldShouldBeUpperCase")
+	private static final Random RANDOM = new Random();
 
-	private static final DecimalFormat fourdf = new DecimalFormat("0000");
+	@SuppressWarnings("AlibabaConstantFieldShouldBeUpperCase")
+	private static final DecimalFormat FOURDF = new DecimalFormat("0000");
 
-	private static final DecimalFormat sixdf = new DecimalFormat("000000");
+	@SuppressWarnings("AlibabaConstantFieldShouldBeUpperCase")
+	private static final DecimalFormat SIXDF = new DecimalFormat("000000");
 
 	public static String getFourBitRandom() {
-		return fourdf.format(random.nextInt(10000));
+		return FOURDF.format(RANDOM.nextInt(10000));
 	}
 
 	public static String getSixBitRandom() {
-		return sixdf.format(random.nextInt(1000000));
+		return SIXDF.format(RANDOM.nextInt(1000000));
 	}
 
 	/**
@@ -37,7 +41,7 @@ public class RandomUtil {
 
 		Random random = new Random();
 
-		HashMap<Object, Object> hashMap = new HashMap<Object, Object>();
+		HashMap<Object, Object> hashMap = new HashMap<>(list.size());
 
 		// 生成随机数字并存入HashMap
 		for (int i = 0; i < list.size(); i++) {

@@ -3,12 +3,12 @@ package com.quan.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.quan.captcha.CaptchaUtils;
 import com.quan.jwt.JwtUtils;
-import com.quan.md5.MD5Utils;
+import com.quan.md5.Md5Utils;
 import com.quan.pojo.TbUser;
 import com.quan.random.RandomUtil;
 import com.quan.response.Result;
 import com.quan.service.TbUserService;
-import com.quan.util.SMSClientUtils;
+import com.quan.util.SmsClientUtils;
 import com.quan.util.TbUserUtils;
 import com.quan.vo.LoginVO;
 import com.quan.vo.ReturnTbUserVO;
@@ -42,7 +42,7 @@ public class LoginController {
     private StringRedisTemplate stringRedisTemplate;
 
     @Resource
-    private SMSClientUtils smsClientUtils;
+    private SmsClientUtils smsClientUtils;
 
     @Resource
     private JwtUtils jwtUtils;
@@ -64,7 +64,7 @@ public class LoginController {
         if (StringUtils.isEmpty(user)) {
             throw new RuntimeException("账号名或密码不对");
         }
-        loginVO.setPassword(MD5Utils.md5Encryption(loginVO.getPassword(), user.getSalt()));
+        loginVO.setPassword(Md5Utils.md5Encryption(loginVO.getPassword(), user.getSalt()));
         qw.eq("password", loginVO.getPassword());
         TbUser tbUser = tbUserService.getOne(qw);
         if (StringUtils.isEmpty(tbUser)) {
@@ -100,7 +100,7 @@ public class LoginController {
 
     @ApiOperation(value = "短信验证", notes = "通过短信验证用户信息")
     @PostMapping("sendSMS")
-    public Result sendSMS(@RequestParam String phoneNumber) {
+    public Result sendSms(@RequestParam String phoneNumber) {
         QueryWrapper<TbUser> qw = new QueryWrapper<>();
         qw.eq("phone_number", phoneNumber);
         if (tbUserService.selectCount(qw) > 0) {
