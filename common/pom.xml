@@ -14,7 +14,7 @@
     <modules>
         <module>common-base</module>
         <module>common-util</module>
-        <module>common-oss</module>
+        <module>common-aliyun</module>
     </modules>
     <dependencies>
         <dependency>
@@ -63,6 +63,11 @@
         <dependency>
             <groupId>joda-time</groupId>
             <artifactId>joda-time</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.aliyun</groupId>
+            <artifactId>aliyun-java-sdk-core</artifactId>
         </dependency>
     </dependencies>
 

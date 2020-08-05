@@ -30,6 +30,7 @@
         <easyexcel.version>2.1.6</easyexcel.version>
         <oss.version>3.10.2</oss.version>
         <joda-time.version>2.9.9</joda-time.version>
+        <aliyun.core.version>4.5.1</aliyun.core.version>
     </properties>
 
     <dependencyManagement>
@@ -86,6 +87,12 @@
                 <groupId>joda-time</groupId>
                 <artifactId>joda-time</artifactId>
                 <version>${joda-time.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.aliyun</groupId>
+                <artifactId>aliyun-java-sdk-core</artifactId>
+                <version>${aliyun.core.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

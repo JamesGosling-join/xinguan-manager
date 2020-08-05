@@ -11,11 +11,10 @@
         <result column="ip" jdbcType="VARCHAR" property="ip"/>
         <result column="user_system" jdbcType="VARCHAR" property="userSystem"/>
         <result column="user_browser" jdbcType="VARCHAR" property="userBrowser"/>
-        <result column="version" jdbcType="BIGINT" property="version"/>
         <result column="deleted" jdbcType="BOOLEAN" property="deleted"/>
     </resultMap>
     <sql id="Base_Column_List">
         <!--@mbg.generated-->
-        id, username, login_time, `location`, ip, user_system, user_browser, version, deleted
+        id, username, login_time, `location`, ip, user_system, user_browser,deleted
     </sql>
 </mapper>

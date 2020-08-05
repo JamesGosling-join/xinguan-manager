@@ -113,7 +113,5 @@ public class TbLog implements Serializable {
 
     public static final String COL_LOCATION = "location";
 
-    public static final String COL_VERSION = "version";
-
     public static final String COL_DELETED = "deleted";
 }

@@ -26,12 +26,12 @@ public class TbUserServiceImpl extends ServiceImpl<TbUserMapper, TbUser> impleme
     /**
      * 根据用户名查询用户是否存在
      *
-     * @param username 用户名
+     * @param wrapper 查询条件
      * @return 查询结果
      */
     @Override
-    public Integer selectCount(String username) {
-        return this.baseMapper.count(username);
+    public Integer selectCount(Wrapper<TbUser> wrapper) {
+        return this.baseMapper.count(wrapper);
     }
 
     /**
@@ -86,19 +86,5 @@ public class TbUserServiceImpl extends ServiceImpl<TbUserMapper, TbUser> impleme
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    /**
-     * @param avatar   头像地址
-     * @param username 用户名
-     * @return java.lang.Boolean
-     * @description TODO
-     * @methodName updateByName
-     * @author 全俊
-     * @date 2020/8/2 23:02
-     */
-    @Override
-    public Boolean updateByName(String avatar, String username) {
-        return this.baseMapper.updateByName(avatar, username);
     }
 }

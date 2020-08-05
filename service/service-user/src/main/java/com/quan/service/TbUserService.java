@@ -20,10 +20,10 @@ public interface TbUserService extends IService<TbUser> {
     /**
      * 根据用户名查询用户是否存在
      *
-     * @param username 用户名
+     * @param wrapper 查询条件
      * @return 查询结果
      */
-    Integer selectCount(String username);
+    Integer selectCount(Wrapper<TbUser> wrapper);
 
     /**
      * 根据传入条件查询所有并分页
@@ -49,15 +49,4 @@ public interface TbUserService extends IService<TbUser> {
      * @return 部门主任信息
      */
     List<MgrUser> findMgrUser();
-
-    /**
-     * @param avatar   头像地址
-     * @param username 用户名
-     * @return java.lang.Boolean
-     * @description TODO
-     * @methodName updateByName
-     * @author 全俊
-     * @date 2020/8/2 23:02
-     */
-    Boolean updateByName(String avatar, String username);
 }

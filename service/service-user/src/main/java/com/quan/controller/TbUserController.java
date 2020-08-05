@@ -1,16 +1,18 @@
 package com.quan.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.quan.md5.MD5Utils;
 import com.quan.pojo.TbUser;
 import com.quan.response.Result;
 import com.quan.service.TbUserService;
 import com.quan.util.OSSClientUtils;
+import com.quan.util.TbUserUtils;
 import com.quan.vo.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,7 +20,6 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.UUID;
 
 /**
  * @author 全俊
@@ -30,6 +31,9 @@ import java.util.UUID;
 public class TbUserController {
     @Resource
     private TbUserService tbUserService;
+
+    @Resource
+    private StringRedisTemplate stringRedisTemplate;
 
     @ApiOperation(value = "查询用户", notes = "跟据查询页数与个数分页查询所有用户信息，按照条件查询")
     @PostMapping({"users/{current}/{size}", "users", "users/{current}"})
@@ -68,15 +72,16 @@ public class TbUserController {
     @ApiOperation(value = "新增用户信息", notes = "新增用户信息")
     @PostMapping("add")
     public Result add(@RequestBody(required = false) TbUserAddVO tbUserAddVO) {
-        if (tbUserService.selectCount(tbUserAddVO.getUsername()) > 0) {
+        QueryWrapper<TbUser> qw=new QueryWrapper<>();
+        qw.eq("username",tbUserAddVO.getUsername());
+        if (tbUserService.selectCount(qw) > 0) {
             throw new RuntimeException("该用户名已被占用");
         }
         TbUser tbUser = new TbUser();
         BeanUtils.copyProperties(tbUserAddVO, tbUser);
-        tbUser.setSalt(UUID.randomUUID().toString().substring(0, 32));
-        tbUser.setPassword(MD5Utils.md5Encryption(tbUser.getPassword(), tbUser.getSalt()));
-        tbUser.setAvatar("https://avatars.dicebear.com/v2/male/" + tbUser.getUsername() + ".svg");
+        TbUserUtils.addUtil(tbUser);
         if (tbUserService.save(tbUser)) {
+            System.out.println("主键"+tbUser.getId());
             return Result.success();
         } else {
             return Result.fail();
@@ -97,7 +102,8 @@ public class TbUserController {
 
     @ApiOperation("导出excel")
     @PostMapping(value = "export")
-    public void exportExcel(HttpServletResponse response, @RequestBody(required = false) TbUserVO tbUserVO) throws IOException {
+    public void exportExcel(HttpServletResponse response,
+                            @RequestBody(required = false) TbUserVO tbUserVO) throws IOException {
         QueryWrapper<UserExcelVO> qw = new QueryWrapper<>();
         getQueryWrapper(qw, tbUserVO);
         tbUserService.findListExcel(response, qw);
@@ -131,10 +137,13 @@ public class TbUserController {
 
     @ApiOperation("上传头像")
     @PostMapping("uploadImg/{username}")
-    public Result uploadImg(MultipartFile file,@PathVariable String username) {
-        OSSClientUtils ossClientUtils=new OSSClientUtils();
-        String avatar=ossClientUtils.upload(file);
-        tbUserService.updateByName(avatar,username);
+    public Result uploadImg(MultipartFile file, @PathVariable String username) {
+        OSSClientUtils ossClientUtils = new OSSClientUtils();
+        String avatar = ossClientUtils.upload(file);
+        UpdateWrapper<TbUser> uw=new UpdateWrapper<>();
+        uw.set("avatar",avatar);
+        uw.eq("username",username);
+        tbUserService.update(uw);
         return Result.success().data(avatar);
     }
 }

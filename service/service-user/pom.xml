@@ -19,7 +19,7 @@
 
         <dependency>
             <groupId>com.quan</groupId>
-            <artifactId>common-oss</artifactId>
+            <artifactId>common-aliyun</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
     </dependencies>

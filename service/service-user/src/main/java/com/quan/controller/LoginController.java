@@ -3,16 +3,23 @@ package com.quan.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.quan.md5.MD5Utils;
 import com.quan.pojo.TbUser;
+import com.quan.random.RandomUtil;
 import com.quan.response.Result;
 import com.quan.service.TbUserService;
+import com.quan.util.SMSClientUtils;
+import com.quan.util.TbUserUtils;
 import com.quan.vo.LoginVO;
 import com.quan.vo.ReturnTbUserVO;
+import com.quan.vo.UserRegister;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.BeanUtils;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author 全俊
@@ -24,6 +31,8 @@ import javax.annotation.Resource;
 public class LoginController {
     @Resource
     private TbUserService tbUserService;
+    @Resource
+    private StringRedisTemplate stringRedisTemplate;
 
     @ApiOperation(value = "登录", notes = "验证登录")
     @PostMapping("/")
@@ -43,8 +52,7 @@ public class LoginController {
         if (tbUser.getStatus() == 0) {
             throw new RuntimeException("该账户已被禁用");
         }
-        Long token = tbUser.getId();
-        return Result.success().data(token);
+        return Result.success().data(tbUser.getId());
     }
 
     @ApiOperation(value = "获得用户信息", notes = "获取当前登录用户信息")
@@ -63,5 +71,53 @@ public class LoginController {
     @PostMapping("loginOut")
     public Result loginOut() {
         return Result.success();
+    }
+
+    @ApiOperation("短信验证")
+    @PostMapping("sendSMS")
+    public Result sendSMS(@RequestParam String phoneNumber) {
+        QueryWrapper<TbUser> qw=new QueryWrapper<>();
+        qw.eq("phone_number",phoneNumber);
+        if(tbUserService.selectCount(qw)>0){
+            throw new RuntimeException("该手机号已被注册");
+        }
+        String code = stringRedisTemplate.opsForValue().get(phoneNumber);
+        if (!StringUtils.isEmpty(code)) {
+            return Result.success();
+        } else {
+            String sixBitRandom = RandomUtil.getSixBitRandom();
+            String templateParam = "{code:" + sixBitRandom + "}";
+            if (new SMSClientUtils().send(phoneNumber, templateParam)) {
+                stringRedisTemplate.opsForValue().set(phoneNumber, sixBitRandom, 5, TimeUnit.MINUTES);
+                return Result.success();
+            } else {
+                return Result.fail();
+            }
+        }
+    }
+
+    @ApiOperation(value = "注册账号", notes = "使用短信验证")
+    @PostMapping("register")
+    public Result register(@RequestBody UserRegister userRegister) {
+        String code = stringRedisTemplate.opsForValue().get(userRegister.getPhoneNumber());
+        if (StringUtils.isEmpty(code)) {
+            throw new RuntimeException("验证码已过期");
+        }
+        if (!code.equalsIgnoreCase(userRegister.getCode())) {
+            throw new RuntimeException("验证码错误");
+        }
+        QueryWrapper<TbUser> qw=new QueryWrapper<>();
+        qw.eq("username",userRegister.getUsername());
+        if (tbUserService.selectCount(qw) > 0) {
+            throw new RuntimeException("该用户名已被占用");
+        }
+        TbUser tbUser = new TbUser();
+        BeanUtils.copyProperties(userRegister, tbUser);
+        TbUserUtils.addUtil(tbUser);
+        if (tbUserService.save(tbUser)) {
+            return Result.success().data(tbUser.getId());
+        } else {
+            return Result.fail();
+        }
     }
 }

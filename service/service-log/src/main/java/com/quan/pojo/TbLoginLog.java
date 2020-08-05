@@ -95,7 +95,5 @@ public class TbLoginLog implements Serializable {
 
     public static final String COL_USER_BROWSER = "user_browser";
 
-    public static final String COL_VERSION = "version";
-
     public static final String COL_DELETED = "deleted";
 }
