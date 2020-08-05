@@ -12,7 +12,6 @@ import com.quan.vo.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.BeanUtils;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -31,9 +30,6 @@ import java.io.IOException;
 public class TbUserController {
     @Resource
     private TbUserService tbUserService;
-
-    @Resource
-    private StringRedisTemplate stringRedisTemplate;
 
     @Resource
     private OSSClientUtils ossClientUtils;
@@ -75,11 +71,7 @@ public class TbUserController {
     @ApiOperation(value = "新增用户信息", notes = "新增用户信息")
     @PostMapping("add")
     public Result add(@RequestBody(required = false) TbUserAddVO tbUserAddVO) {
-        QueryWrapper<TbUser> qw=new QueryWrapper<>();
-        qw.eq("username",tbUserAddVO.getUsername());
-        if (tbUserService.selectCount(qw) > 0) {
-            throw new RuntimeException("该用户名已被占用");
-        }
+        TbUserUtils.setTbUser(tbUserService,tbUserAddVO.getUsername());
         TbUser tbUser = new TbUser();
         BeanUtils.copyProperties(tbUserAddVO, tbUser);
         TbUserUtils.addUtil(tbUser);

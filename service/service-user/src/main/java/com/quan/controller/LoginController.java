@@ -131,16 +131,13 @@ public class LoginController {
         if (!code.equalsIgnoreCase(userRegister.getCode())) {
             throw new RuntimeException("验证码错误");
         }
-        QueryWrapper<TbUser> qw = new QueryWrapper<>();
-        qw.eq("username", userRegister.getUsername());
-        if (tbUserService.selectCount(qw) > 0) {
-            throw new RuntimeException("该用户名已被占用");
-        }
+        TbUserUtils.setTbUser(tbUserService,userRegister.getUsername());
         TbUser tbUser = new TbUser();
         BeanUtils.copyProperties(userRegister, tbUser);
         TbUserUtils.addUtil(tbUser);
         if (tbUserService.save(tbUser)) {
-            return Result.success().data(tbUser.getId());
+            String token = jwtUtils.createJwt(tbUser.getUsername());
+            return Result.success().data(token);
         } else {
             return Result.fail();
         }
