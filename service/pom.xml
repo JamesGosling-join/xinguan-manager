@@ -15,6 +15,7 @@
         <module>service-user</module>
         <module>service-department</module>
         <module>service-log</module>
+        <module>service-repertory</module>
     </modules>
     <dependencies>
         <!--需要开发controller-->

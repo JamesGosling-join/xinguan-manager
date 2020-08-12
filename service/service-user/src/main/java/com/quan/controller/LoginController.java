@@ -24,7 +24,6 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
-import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -73,14 +72,13 @@ public class LoginController {
         if (tbUser.getStatus() == 0) {
             throw new RuntimeException("该账户已被禁用");
         }
-        String token = jwtUtils.createJwt(tbUser.getUsername());
-        return Result.success().data(token);
+        return Result.success().data(jwtUtils.createJwt(tbUser.getUsername()));
     }
 
     @ApiOperation(value = "获得用户信息", notes = "获取当前登录用户信息")
     @GetMapping("user")
     public Result getUser(@RequestParam String token) {
-        String username = jwtUtils.parseJwtTest(token);
+        String username = jwtUtils.parseJwt(token);
         QueryWrapper<TbUser> qw = new QueryWrapper<>();
         qw.eq("username", username);
         TbUser tbUser = tbUserService.getOne(qw);
@@ -131,13 +129,12 @@ public class LoginController {
         if (!code.equalsIgnoreCase(userRegister.getCode())) {
             throw new RuntimeException("验证码错误");
         }
-        TbUserUtils.setTbUser(tbUserService,userRegister.getUsername());
+        TbUserUtils.setTbUser(tbUserService, userRegister.getUsername());
         TbUser tbUser = new TbUser();
         BeanUtils.copyProperties(userRegister, tbUser);
         TbUserUtils.addUtil(tbUser);
         if (tbUserService.save(tbUser)) {
-            String token = jwtUtils.createJwt(tbUser.getUsername());
-            return Result.success().data(token);
+            return Result.success().data(jwtUtils.createJwt(tbUser.getUsername()));
         } else {
             return Result.fail();
         }
@@ -146,7 +143,7 @@ public class LoginController {
     @ApiOperation(value = "生成图片验证码", notes = "将生成的验证码返回到前端")
     @GetMapping("captcha")
     public Result captcha(HttpServletRequest request, HttpServletResponse response, String key) throws Exception {
-        if(!StringUtils.isEmpty(key)) {
+        if (!StringUtils.isEmpty(key)) {
             stringRedisTemplate.delete(key);
         }
         Map<String, String> map = captchaUtils.captcha(request, response, key);

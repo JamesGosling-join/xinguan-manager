@@ -6,8 +6,6 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * 公共返回结果类
@@ -34,17 +32,17 @@ public class Result<T> implements Serializable {
 
     public static Result success() {
         Result result = new Result();
-        result.success = ResultCode.SUCCESS.getSuccess();
-        result.message = ResultCode.SUCCESS.getMessage();
-        result.code = ResultCode.SUCCESS.getCode();
+        result.success = ResultCode.SUCCESS.getFLAG();
+        result.message = ResultCode.SUCCESS.getMESSAGE();
+        result.code = ResultCode.SUCCESS.getCODE();
         return result;
     }
 
     public static Result fail() {
         Result result = new Result();
-        result.success = ResultCode.FAIL.getSuccess();
-        result.code = ResultCode.FAIL.getCode();
-        result.message = ResultCode.FAIL.getMessage();
+        result.success = ResultCode.FAIL.getFLAG();
+        result.code = ResultCode.FAIL.getCODE();
+        result.message = ResultCode.FAIL.getMESSAGE();
         return result;
     }
 
@@ -55,6 +53,11 @@ public class Result<T> implements Serializable {
 
     public Result message(String message) {
         this.message = message;
+        return this;
+    }
+
+    public Result code(Integer code) {
+        this.code = code;
         return this;
     }
 }

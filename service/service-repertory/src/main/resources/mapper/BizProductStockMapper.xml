@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.quan.mapper.BizProductStockMapper">
+    <resultMap id="BaseResultMap" type="com.quan.pojo.BizProductStock">
+        <!--@mbg.generated-->
+        <!--@Table biz_product_stock-->
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="p_num" jdbcType="VARCHAR" property="pNum"/>
+        <result column="stock" jdbcType="BIGINT" property="stock"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        id, p_num, stock
+    </sql>
+</mapper>

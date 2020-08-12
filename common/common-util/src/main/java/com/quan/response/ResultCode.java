@@ -15,13 +15,13 @@ public enum ResultCode {
      * 代表失败
      */
     FAIL(20001, "失败", false);
-    private Integer code;
-    private String message;
-    private Boolean success;
+    private final Integer CODE;
+    private final String MESSAGE;
+    private final Boolean FLAG;
 
-    private ResultCode(Integer code, String message, Boolean success) {
-        this.code = code;
-        this.message = message;
-        this.success = success;
+    private ResultCode(Integer code, String message, Boolean flag) {
+        this.CODE = code;
+        this.MESSAGE = message;
+        this.FLAG = flag;
     }
 }

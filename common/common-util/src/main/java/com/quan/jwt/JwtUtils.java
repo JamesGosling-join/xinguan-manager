@@ -13,7 +13,8 @@ import java.util.Date;
  */
 @Component
 public class JwtUtils {
-    private String key="asd855643";
+    private String key = "asd855643";
+
     public String createJwt(String username) {
         long now = System.currentTimeMillis();
         long exp = now + 1000 * 60 * 30;
@@ -25,10 +26,17 @@ public class JwtUtils {
         return builder.compact();
     }
 
-    public String parseJwtTest(String compactJws) {
+    public String parseJwt(String compactJws) {
         Claims claims = Jwts.parser()
                 .setSigningKey(key)
-                .parseClaimsJws(compactJws).getBody();
+                .parseClaimsJws(compactJws)
+                .getBody();
         return claims.getSubject();
+    }
+
+    public void tokenRefresh(){
+        long now = System.currentTimeMillis();
+        long exp = now + 1000 * 60 * 30;
+        Jwts.claims().setExpiration(new Date(exp));
     }
 }
