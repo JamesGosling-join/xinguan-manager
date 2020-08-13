@@ -22,13 +22,13 @@ import java.util.UUID;
  */
 @Component
 public class OSSClientUtils {
-    private String endPoint = "oss-cn-shanghai.aliyuncs.com";
+    private String endPoint = "你的endPoint";
 
-    private String accessKeyId = "LTAI4GAP7JdCn4wcEyK8BxyC";
+    private String accessKeyId = "你的accessKeyId";
 
-    private String accessKeySecret = "xMMAJ8BNNV1HyHOpaLIXqOgG8bPeNv";
+    private String accessKeySecret = "你的accessKeySecret";
 
-    private String bucketName = "quan-image";
+    private String bucketName = "你的bucketName";
 
     private OSS ossClient;
 

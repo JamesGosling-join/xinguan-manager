@@ -32,7 +32,7 @@ public class SmsClientUtils {
      */
     public Boolean send(String phoneNumber, String templateParam) {
         CommonResponse response = null;
-        DefaultProfile profile = DefaultProfile.getProfile("cn-hangzhou", "LTAI4G8V38ygaauwFuXKnyXC", "SDZcf5JYoyYuK7qZUfTSYg798ysCBA");
+        DefaultProfile profile = DefaultProfile.getProfile("你的regionId", "你的accessKeyId", "你的seret");
         IAcsClient client = new DefaultAcsClient(profile);
 
         CommonRequest request = new CommonRequest();
