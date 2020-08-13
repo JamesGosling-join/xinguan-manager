@@ -16,6 +16,7 @@ public class ConfigConsts {
 
     static {
         LIST.add("/userservice/login/");
+        LIST.add("/userservice/login/sendSMS");
         LIST.add("/userservice/login/loginOut");
         LIST.add("/userservice/login/register");
         LIST.add("/userservice/login/captcha");
