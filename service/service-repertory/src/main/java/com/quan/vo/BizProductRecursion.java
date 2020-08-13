@@ -7,8 +7,10 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -42,4 +44,20 @@ public class BizProductRecursion {
      */
     @ApiModelProperty(value = "子级分类")
     private List<BizProductRecursion> children;
+
+    /**
+     * 如果集合没有数据则返回null
+     *
+     * @return java.util.List<com.quan.vo.BizProductRecursion>
+     * @description TODO
+     * @methodName getChildren
+     * @author 全俊
+     * @date 2020/8/13 18:25
+     */
+    public List<BizProductRecursion> getChildren() {
+        if (children.isEmpty()) {
+            return null;
+        }
+        return children;
+    }
 }
